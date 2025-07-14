@@ -10,23 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout code
+    # 📥 1. Checkout your source code
     - name: 📥 Checkout code
       uses: actions/checkout@v3
 
-    # 2️⃣ Set up Python
+    # 🐍 2. Set up Python
     - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
 
-    # 3️⃣ Install dependencies
+    # 📦 3. Install dependencies
     - name: 📦 Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4️⃣ Export environment variables securely
+    # ⚙️ 4. Export environment variables securely
     - name: ⚙️ Export environment variables
       run: |
         echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
@@ -34,19 +34,23 @@ jobs:
         echo "DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }}" >> $GITHUB_ENV
         echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> $GITHUB_ENV
 
-    # 5️⃣ Prepare static directory
+    # 🛠️ 5. Prepare static directory
     - name: 🛠️ Prepare static directory
       run: mkdir -p staticfiles
 
-    # 6️⃣ Collect static files
+    # 🧪 6. Confirm settings.py includes import os
+    - name: 🧪 Confirm settings.py header
+      run: head -n 10 ds_erp/settings.py  # Update path if needed
+
+    # 📁 7. Collect static files
     - name: 📁 Collect static files
       run: python manage.py collectstatic --noinput
 
-    # 7️⃣ Run migrations
+    # 🗃️ 8. Apply database migrations
     - name: 🗃️ Run migrations
       run: python manage.py migrate
 
-    # 🚀 Deploy to Azure Web App
+    # 🚀 9. Deploy to Azure Web App
     - name: 🚀 Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
@@ -54,4 +58,5 @@ jobs:
         slot-name: production
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
         package: .
+
 
