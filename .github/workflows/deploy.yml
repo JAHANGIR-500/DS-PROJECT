@@ -16,7 +16,7 @@ jobs:
     - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'  # Use a stable version compatible with Django and your packages
+        python-version: '3.12'  # Stable and compatible with Django
 
     - name: 📦 Install dependencies
       run: |
