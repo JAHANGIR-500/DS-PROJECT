@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DJANGO_SETTINGS_MODULE: dscp.settings  # ✅ make sure this matches your structure
+      DJANGO_SETTINGS_MODULE: dscp.settings  # ✅ Confirm this matches your Django project’s name
 
     steps:
     # 📥 1. Checkout source code
@@ -29,7 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # ⚙️ 4. Export environment variables
+    # ⚙️ 4. Export environment variables from GitHub Secrets
     - name: ⚙️ Export environment variables
       run: |
         echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
@@ -37,23 +37,19 @@ jobs:
         echo "DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }}" >> $GITHUB_ENV
         echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> $GITHUB_ENV
 
-    # 🛠️ 5. Prepare static directory
-    - name: 🛠️ Prepare static directory
-      run: mkdir -p staticfiles
-
-    # 🧪 6. Show top of settings.py
+    # 🧪 5. Print contents of settings.py to confirm import statements
     - name: 🧪 Print settings.py content
-      run: cat dscp/settings.py  # 🧠 adjust this path if your actual file is elsewhere
+      run: cat dscp/dscp/settings.py
 
-    # 📁 7. Collect static files
+    # 📁 6. Collect static files
     - name: 📁 Collect static files
       run: python manage.py collectstatic --noinput
 
-    # 🗃️ 8. Apply database migrations
+    # 🗃️ 7. Apply database migrations
     - name: 🗃️ Run migrations
       run: python manage.py migrate
 
-    # 🚀 9. Deploy to Azure
+    # 🚀 8. Deploy to Azure Web App
     - name: 🚀 Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
