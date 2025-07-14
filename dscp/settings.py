@@ -1,6 +1,5 @@
 import os
-import json  # ✅ Required for loading environment variables from JSON strings
-
+import json
 from pathlib import Path
 
 # 🏗️ Base directory
@@ -8,11 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 🔐 Security
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-default-key')
-
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
-
 ALLOWED_HOSTS = json.loads(os.environ.get('DJANGO_ALLOWED_HOSTS', '["localhost"]'))
-
 CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get('CSRF_TRUSTED_ORIGINS', '[]'))
 
 # 📦 Installed apps
@@ -31,6 +27,8 @@ INSTALLED_APPS = [
 # ⚙️ Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Optional: add WhiteNoise middleware for static file handling
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -45,7 +43,7 @@ ROOT_URLCONF = 'dscp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Optional: for custom templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Customize as needed
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,19 +75,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 🌍 Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'  # Adjust to match your location
 USE_I18N = True
 USE_TZ = True
 
 # 📁 Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Optional: enable WhiteNoise for production static serving
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')  # Place right after SecurityMiddleware
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Optional for Azure
 
 # 🆔 Default primary key field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
 
