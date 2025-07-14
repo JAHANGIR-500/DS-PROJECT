@@ -16,7 +16,7 @@ jobs:
     - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12'  # Adjust if you're using a different version locally
+        python-version: '3.12'  # Use a stable version compatible with Django and your packages
 
     - name: 📦 Install dependencies
       run: |
@@ -24,19 +24,19 @@ jobs:
         pip install -r requirements.txt
       working-directory: .
 
-    - name: ⚙️ Set environment variables for build
+    - name: ⚙️ Export environment variables
       run: |
-        echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> $GITHUB_ENV
-        echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> $GITHUB_ENV
-        echo DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }} >> $GITHUB_ENV
-        echo CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }} >> $GITHUB_ENV
+        echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
+        echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> $GITHUB_ENV
+        echo "DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }}" >> $GITHUB_ENV
+        echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> $GITHUB_ENV
 
     - name: 📁 Collect static files
       run: |
         python manage.py collectstatic --noinput
       working-directory: .
 
-    - name: 🛠️ Apply migrations
+    - name: 🛠️ Run migrations
       run: |
         python manage.py migrate
       working-directory: .
