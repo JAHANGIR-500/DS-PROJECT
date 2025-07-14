@@ -5,13 +5,13 @@ from pathlib import Path
 # 🏗️ Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔐 Security
+# 🔐 Security settings
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'unsafe-default-key')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = json.loads(os.environ.get('DJANGO_ALLOWED_HOSTS', '["localhost"]'))
 CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get('CSRF_TRUSTED_ORIGINS', '[]'))
 
-# 📦 Installed apps
+# 📦 Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,10 +24,10 @@ INSTALLED_APPS = [
     'project',
 ]
 
-# ⚙️ Middleware
+# ⚙️ Middleware configuration
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # Optional: add WhiteNoise middleware for static file handling
+    # Optional for static file serving in production
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -37,9 +37,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# 🌐 URL configuration
 ROOT_URLCONF = 'dscp.urls'
 
-# 🖼️ Templates
+# 🎨 Templates setup
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -55,9 +56,10 @@ TEMPLATES = [
     },
 ]
 
+# 🚀 WSGI application
 WSGI_APPLICATION = 'dscp.wsgi.application'
 
-# 🗄️ Database
+# 🗄️ Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,7 +67,7 @@ DATABASES = {
     }
 }
 
-# 🔐 Password validation
+# 🔒 Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -75,18 +77,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 🌍 Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Dhaka'  # Adjust to match your location
+TIME_ZONE = 'Asia/Dhaka'  # Localized to your region
 USE_I18N = True
 USE_TZ = True
 
 # 📁 Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Optional for Azure
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # Optional for production
 
-# 🆔 Default primary key field
+# 🆔 Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
 
