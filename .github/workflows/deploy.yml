@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DJANGO_SETTINGS_MODULE: dscp.settings  # ✅ Ensure the correct settings file is used
+      DJANGO_SETTINGS_MODULE: dscp.settings  # ✅ make sure this matches your structure
 
     steps:
-    # 📥 1. Checkout code
+    # 📥 1. Checkout source code
     - name: 📥 Checkout code
       uses: actions/checkout@v3
 
@@ -41,9 +41,9 @@ jobs:
     - name: 🛠️ Prepare static directory
       run: mkdir -p staticfiles
 
-    # 🧪 6. Show settings file header
-    - name: 🧪 Confirm settings.py contains import os
-      run: head -n 10 dscp/settings.py
+    # 🧪 6. Show top of settings.py
+    - name: 🧪 Print settings.py content
+      run: cat dscp/settings.py  # 🧠 adjust this path if your actual file is elsewhere
 
     # 📁 7. Collect static files
     - name: 📁 Collect static files
@@ -61,4 +61,6 @@ jobs:
         slot-name: production
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
         package: .
+
+
 
