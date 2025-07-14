@@ -9,8 +9,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      DJANGO_SETTINGS_MODULE: dscp.settings  # ✅ Ensure the correct settings file is used
+
     steps:
-    # 📥 1. Checkout your source code
+    # 📥 1. Checkout code
     - name: 📥 Checkout code
       uses: actions/checkout@v3
 
@@ -26,7 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # ⚙️ 4. Export environment variables securely
+    # ⚙️ 4. Export environment variables
     - name: ⚙️ Export environment variables
       run: |
         echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> $GITHUB_ENV
@@ -38,9 +41,9 @@ jobs:
     - name: 🛠️ Prepare static directory
       run: mkdir -p staticfiles
 
-    # 🧪 6. Confirm settings.py includes import os
-    - name: 🧪 Confirm settings.py header
-      run: head -n 10 ds_erp/settings.py  # Update path if needed
+    # 🧪 6. Show settings file header
+    - name: 🧪 Confirm settings.py contains import os
+      run: head -n 10 dscp/settings.py
 
     # 📁 7. Collect static files
     - name: 📁 Collect static files
@@ -50,7 +53,7 @@ jobs:
     - name: 🗃️ Run migrations
       run: python manage.py migrate
 
-    # 🚀 9. Deploy to Azure Web App
+    # 🚀 9. Deploy to Azure
     - name: 🚀 Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
@@ -58,5 +61,4 @@ jobs:
         slot-name: production
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
         package: .
-
 
