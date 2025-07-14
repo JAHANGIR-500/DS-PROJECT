@@ -1,0 +1,41 @@
+name: 🚀 Deploy Django App to Azure
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'  # Recommended stable version for Django
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      working-directory: DSCP
+    - name: ⚙️ Set environment variables (for collectstatic/migrate)
+      run: |
+        echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> $GITHUB_ENV
+        echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> $GITHUB_ENV
+        echo DJANGO_DEBUG=${{ secrets.DJANGO_DEBUG }} >> $GITHUB_ENV
+        echo CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }} >> $GITHUB_ENV
+    - name: 📁 Collect static files
+      run: |
+        python manage.py collectstatic --noinput
+      working-directory: DSCP
+    - name: 🛠️ Apply migrations
+      run: |
+        python manage.py migrate
+      working-directory: DSCP
+    - name: 🚀 Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ds-erp-app
+        slot-name: production
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROFILE }}
+        package: DSCP
